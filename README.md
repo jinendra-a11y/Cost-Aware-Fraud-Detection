@@ -26,10 +26,10 @@ env\Scripts\Activate.ps1   # PowerShell
 2. Install dependencies (use `requirements copy.txt` for the normalization/test harness)
 
 ```powershell
-pip install -r "requirements copy.txt"
+pip install -r "requirements.txt"
 ```
 
-3. Run the normalization test harness (reads `OCR/ocr_output.json` and writes `Normalization/actual_model_out.json`)
+3. Run the normalization test harness (reads `OCR/ocr_output.json` and writes `Normalization/actual_model_out.json`)(only for developer)
 
 ```powershell
 python Normalization/normalization_out.py
@@ -40,6 +40,13 @@ python Normalization/normalization_out.py
 ```powershell
 # configure env vars (see config.py) then
 python manage.py runserver
+```
+
+5. Run NiceGUI App(in another terminal)
+
+```powershell
+# configure env vars (see config.py) then
+python dashboard/app.py
 ```
 
 Notes on tests & integration
