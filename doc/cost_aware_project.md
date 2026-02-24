@@ -30,32 +30,24 @@ Reasoning summary:
 - The rule-checks (business rules + derived features) achieved the required decision coverage, making the second model redundant.
 - Removing it simplified the pipeline, lowered costs, and reduced operational complexity while preserving decision quality.
 
-Rule-check constraints (exact checks implemented):
-- Mandatory fields: `bill_type`, `bill_date_time`, `amount`, `currency`, `vendor`, `location` — missing fields produce `INSUFFICIENT_DATA`.
-- Currency must be `GBP` — otherwise `BILL_CURRENCY_MISMATCH`.
-- Amount sanity: numeric and > 0 — otherwise `INSUFFICIENT_DATA` or `BILL_AMOUNT_UNACCEPTABLE`.
-- Duplicate detection by signature (`bill_type`, `bill_date_time`, `amount`, `vendor`) — duplicates are recorded.
-- Total consistency: sum of `line_items` vs `amount` with 5% tolerance — `BILL_TOTAL_MISMATCH` or `INSUFFICIENT_DATA`.
-- Time validation:
-	- For travel tickets (`Bus Ticket`, `Train Ticket`, `Metro Ticket`, `Taxi Bill`, `Other Bill`): if `amount` > 10 → `BILL_AMOUNT_UNREASONABLE`; if bill date differs from pickup by >1 day → `ACCESS_TRAVEL_DATE_TOO_FAR`.
-	- For other bills: bill datetime must fall between job `pickup_time` and `drop_time` → `TIME_OUTSIDE_JOB_WINDOW`.
+Rule-check constraints:
+- **Mandatory fields**: `bill_type`, `bill_date_time`, `amount`, `currency`, `vendor`, `location` → `INSUFFICIENT_DATA` if missing.
+- **Currency**: must be `GBP` → `BILL_CURRENCY_MISMATCH` otherwise.
+- **Amount**: numeric and > 0 → `BILL_AMOUNT_UNACCEPTABLE` if invalid.
+- **Duplicates**: detected by (`bill_type`, `bill_date_time`, `amount`, `vendor`) signature.
+- **Total consistency**: sum of `line_items` vs `amount` within 5% tolerance.
+- **Time validation**:
+	- Travel bills: `amount` > 10 → `BILL_AMOUNT_UNREASONABLE`; date >1 day from pickup → `ACCESS_TRAVEL_DATE_TOO_FAR`.
+	- Other bills: datetime must be between job `pickup_time` and `drop_time` → `TIME_OUTSIDE_JOB_WINDOW`.
+- **Additional checks**: `INSUFFICIENT_DATE_DATA`, `INSUFFICIENT_AMOUNT_DATA`, `INVALID_DATETIME_FORMAT`, `BILL_LOCATION_UNREASONABLE`.
 
-Additional constraints surfaced in `jobs/services.py` and used as critical checks:
-- `INSUFFICIENT_DATE_DATA`, `INSUFFICIENT_AMOUNT_DATA`, `INVALID_DATETIME_FORMAT`, `BILL_LOCATION_UNREASONABLE`.
+Pipeline behavior:
+- **Critical constraint hit** → `early_fail` with `fraud_decision: Yes`, `confidence: 100`, and detailed `reasoning`.
+- **Time constraints** (`TIME_OUTSIDE_JOB_WINDOW`, `ACCESS_TRAVEL_DATE_TOO_FAR`) → `time_check: Fail`; otherwise `Pass`.
+- **Location check**: `Review` for access-travel bills; `Fail`/`Pass` based on `BILL_LOCATION_UNREASONABLE`.
+- **No critical constraints** → queued as `pass_to_llm`.
 
-How constraints are used in the pipeline (behavior):
-- The service collects rule results from `run_rule_engine` (per-bill fails and duplicates) and treats a set of labels as `CRITICAL_CONSTRAINTS`.
-- If any critical constraint appears for a bill, the pipeline marks the bill as an `early_fail` with:
-	- `fraud_decision: Yes`, `confidence_score: 100`, `failed_constraints` (list), and human-readable `reasoning` entries for each failed constraint.
-	- `time_check` is set to `Fail` if any `CRITICAL_TIME_CONSTRAINTS` (`TIME_OUTSIDE_JOB_WINDOW`, `ACCESS_TRAVEL_DATE_TOO_FAR`) exist; otherwise `Pass`.
-	- `location_check` is `Review` for access-travel bill types, or `Fail`/`Pass` based on `BILL_LOCATION_UNREASONABLE`.
-- Bills without critical constraints are queued as `pass_to_llm` (no immediate LLM fraud model is used currently).
-
-Implementation notes:
-- The service maps normalization outputs to filenames and stores `bill_id`, `filename`, and `file_path` on normalized bills for tracking.
-- The normalization harness and `jobs/rules_check.py` supply the inputs to these checks; `jobs/services.py` contains the final decision logic and reasoning mapping.
-
-(See `jobs/rules_check.py` and `jobs/services.py` for the authoritative implementation.)
+See `jobs/rules_check.py` and `jobs/services.py` for implementation details.
 
 ## Pros of the current cost-aware design
 - Lower operational and inference costs.
@@ -78,18 +70,3 @@ Why this is helpful:
 - `config.py` and `NORMALIZE_PROMPT` make swapping normalization models straightforward for future tests.
 - The testing script evaluates model output against expected normalization (`Normalization/expected_norm_out.json`), providing a clear pass/fail baseline.
 
-Integration guidance (short plan):
-- Keep the current separate testing harness for experimentation and CI model validation.
-- For production use, integrate the stable normalization step into the Django service by:
-	1. Turning the normalization harness into a reusable module or Django app.
-	2. Moving configuration into Django settings (or load from `config.py` once during startup).
-	3. Adding a management command or REST endpoint to run normalization in-app.
-	4. Adding unit tests and CI checks to validate normalization outputs before deployment.
-
-Pros & significance:
-- Faster model iteration without touching production code.
-- Clear migration path to production when a model proves stable.
-- Maintains separation of concerns: experiment vs. runtime.
-
----
-Short, professional summary created per request.

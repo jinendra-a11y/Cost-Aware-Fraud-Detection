@@ -54,5 +54,3 @@ Files of interest for maintainers
 Contributing
 - Open issues or pull requests. For normalization model changes, include test inputs (`OCR/ocr_output.json`) and expected normalization outputs (`Normalization/expected_norm_out.json`).
 
-License
-- (Add your license here)

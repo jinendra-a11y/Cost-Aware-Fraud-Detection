@@ -52,3 +52,6 @@ logs/
 *.log
 
 config.py
+
+test_pipeline.py
+verify_costs.py
