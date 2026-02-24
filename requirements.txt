@@ -1,0 +1,15 @@
+# Web Framework & API
+django>=4.2
+django-ninja
+nicegui
+python-dotenv
+
+# AI & OCR Providers
+langchain-groq
+google-cloud-vision
+requests
+
+# Async Utility
+asgiref
+daphne
+channels

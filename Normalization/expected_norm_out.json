@@ -1,0 +1,122 @@
+[
+  {
+    "bill_id": "612034_1.png",
+    "bill_type": "Train Ticket",
+    "bill_date_time": "2026-01-28T10:28:51",
+    "amount": 8.0,
+    "currency": "GBP",
+    "vendor": "Trainline",
+    "location": "Wigan North Western",
+    "location_postal_code": null,
+    "line_items": [],
+    "metadata": {
+      "distance_km": null,
+      "duration_minutes": null,
+      "vehicle_reg": null,
+      "tax_amount": null,
+      "vat_rate": 20.0,
+      "room_nights": null,
+      "energy_kwh": null
+    }
+  },
+  {
+    "bill_id": "612034_2.png",
+    "bill_type": "Fuel",
+    "bill_date_time": "2026-01-28T14:03",
+    "amount": 10.0,
+    "currency": "GBP",
+    "vendor": "Rontec",
+    "location": "Sunderland",
+    "location_postal_code": "SR4 BHB",
+    "line_items": [],
+    "metadata": {
+      "distance_km": null,
+      "duration_minutes": null,
+      "vehicle_reg": null,
+      "tax_amount": null,
+      "vat_rate": 20.0,
+      "room_nights": null,
+      "energy_kwh": null
+    }
+  },
+  {
+    "bill_id": "612340_1.jpg",
+    "bill_type": "Bus Ticket",
+    "bill_date_time": "2026-01-28T10:31",
+    "amount": 2.2,
+    "currency": "GBP",
+    "vendor": "Globe Holidays",
+    "location": "Kirkgate",
+    "location_postal_code": null,
+    "line_items": [],
+    "metadata": {
+      "distance_km": null,
+      "duration_minutes": null,
+      "vehicle_reg": null,
+      "tax_amount": null,
+      "vat_rate": null,
+      "room_nights": null,
+      "energy_kwh": null
+    }
+  },
+  {
+    "bill_id": "612340_2.png",
+    "bill_type": "Bus Ticket",
+    "bill_date_time": "2026-01-28T10:01",
+    "amount": 2.5,
+    "currency": "GBP",
+    "vendor": "Arriva",
+    "location": "Mill Lane",
+    "location_postal_code": null,
+    "line_items": [],
+    "metadata": {
+      "distance_km": null,
+      "duration_minutes": null,
+      "vehicle_reg": null,
+      "tax_amount": null,
+      "vat_rate": null,
+      "room_nights": null,
+      "energy_kwh": null
+    }
+  },
+  {
+    "bill_id": "612340_3.jpg",
+    "bill_type": "Fuel",
+    "bill_date_time": "2026-01-28T11:48:28",
+    "amount": 25.08,
+    "currency": "GBP",
+    "vendor": "Asda Store Ltd",
+    "location": "York Road, Doncaster",
+    "location_postal_code": "DN5 8SD",
+    "line_items": [],
+    "metadata": {
+      "distance_km": null,
+      "duration_minutes": null,
+      "vehicle_reg": null,
+      "tax_amount": null,
+      "vat_rate": 20.0,
+      "room_nights": null,
+      "energy_kwh": null
+    }
+  },
+  {
+    "bill_id": "612340_4.jpg",
+    "bill_type": "Other Expense",
+    "bill_date_time": null,
+    "amount": null,
+    "currency": null,
+    "vendor": "Google",
+    "location": "The Broadway",
+    "location_postal_code": null,
+    "line_items": [],
+    "metadata": {
+      "distance_km": null,
+      "duration_minutes": null,
+      "vehicle_reg": null,
+      "tax_amount": null,
+      "vat_rate": null,
+      "room_nights": null,
+      "energy_kwh": null
+    }
+  }
+]

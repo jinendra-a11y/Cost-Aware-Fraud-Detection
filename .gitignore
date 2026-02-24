@@ -1,0 +1,54 @@
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+env/
+venv/
+.venv/
+env/*
+
+# dotenv / secrets
+.env
+*.pem
+*.key
+credentials.json
+expenceocr-by_CC.json
+expense-approve-ocr.json
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+media/uploads/
+media/*.sqlite3
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage
+.pytest_cache/
+htmlcov/
+.coverage
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Misc
+logs/
+*.log
+
+config.py
