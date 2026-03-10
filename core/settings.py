@@ -130,6 +130,7 @@ USE_TZ = True
 # Static & media files
 # ----------------------------------------------------------------------
 STATIC_URL = "static/"
+STATIC_ROOT = Path("/var/www/static")
 
 # **Important for deployment**
 MEDIA_URL = "/media/"
