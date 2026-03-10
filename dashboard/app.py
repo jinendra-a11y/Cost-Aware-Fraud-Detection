@@ -354,8 +354,9 @@ import asyncio
 import websockets
 from PIL import Image
 
-API_URL = "http://127.0.0.1:8000"
-WS_URL = "ws://127.0.0.1:8000/ws"
+BACKEND_URL = os.getenv("BACKEND_URL")
+API_URL = BACKEND_URL + "/api"
+WS_URL = BACKEND_URL + "/ws"
 
 uploaded_files = []
 upload_status = {'to_upload': 0, 'uploaded': 0}

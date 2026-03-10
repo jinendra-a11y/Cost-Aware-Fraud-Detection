@@ -2,7 +2,8 @@ import requests
 import json
 import websockets
 
-BASE = "http://localhost:8000"
+BACKEND_URL = os.getenv("BACKEND_URL")
+BASE = BACKEND_URL + "/api"
 
 def submit_job(job_details: dict, file_paths: list) -> dict:
     """Submit a job with files to the Django backend using requests library."""
