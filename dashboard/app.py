@@ -356,7 +356,7 @@ import os
 from PIL import Image
 
 BACKEND_URL = os.getenv("BACKEND_URL")
-API_URL = BACKEND_URL + "/api"
+API_URL = BACKEND_URL
 WS_URL = BACKEND_URL + "/ws"
 
 uploaded_files = []
