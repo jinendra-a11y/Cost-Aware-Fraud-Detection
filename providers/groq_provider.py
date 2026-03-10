@@ -13,14 +13,9 @@ FRAUD_DETECTION_PROMPT = CURRENT_DIR / "FRAUD_DETECTION_PROMPT"
 
 class GroqProvider(BaseProvider):
     def __init__(self, model_name="llama3-8b-8192"):
-        # We don't hardcode the model in __init__ anymore, but accepting it for compatibility
         pass
 
     def execute(self, *args, **kwargs) -> ProviderResponse:
-        """
-        Satisfies the BaseProvider abstract method.
-        Not used directly by services.py which calls specific methods.
-        """
         raise NotImplementedError("Use normalize_bills or evaluate_fraud instead.")
 
     def _execute(self, model_name: str, system_prompt: str, user_payload: Any) -> ProviderResponse:

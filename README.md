@@ -5,6 +5,7 @@ Short, production-oriented pipeline for OCR → normalization → rule checks �
 **Key pieces**
 - Project overview: [doc/cost_aware_project.md](doc/cost_aware_project.md#L1)
  - Project overview (design doc): [doc/cost_aware_project.md](doc/cost_aware_project.md#L1)
+ - Project overview (API doc): [doc/API.md](doc/API.md#L1)
 - Rule checks and pipeline logic: [jobs/rules_check.py](jobs/rules_check.py#L1) and [jobs/services.py](jobs/services.py#L1)
 - Normalization test harness: [Normalization/normalization_out.py](Normalization/normalization_out.py#L1)
 - OCR provider example: [providers/ocr_provider.py](providers/ocr_provider.py#L1)
@@ -45,7 +46,6 @@ python manage.py runserver
 5. Run NiceGUI App(in another terminal)
 
 ```powershell
-# configure env vars (see config.py) then
 python dashboard/app.py
 ```
 
@@ -60,4 +60,5 @@ Files of interest for maintainers
 
 Contributing
 - Open issues or pull requests. For normalization model changes, include test inputs (`OCR/ocr_output.json`) and expected normalization outputs (`Normalization/expected_norm_out.json`).
+
 

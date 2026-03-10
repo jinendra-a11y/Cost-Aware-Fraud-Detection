@@ -100,6 +100,8 @@ def check_bill_total(bill: dict, tolerance: float = 0.05):
 def check_location_validation(bill: dict, pickup_latitude: float, pickup_longitude: float, drop_latitude: float, drop_longitude: float, distance_between_pickup_and_drop: int):
     distance_treshold_km = 30
     bill_location = bill.get("location_postal_code")
+    if not bill_location:
+        return "BILL_LOCATION_UNREASONABLE"
     
     bill_location_data = get_lat_long_from_postcode(bill_location)
     bill_latitude, bill_longitude = bill_location_data.get("latitude"), bill_location_data.get("longitude")

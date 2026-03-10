@@ -146,6 +146,7 @@ class ExpensePipelineService:
                         bill['bill_id'] = full_path
                         bill['filename'] = filename
                         bill['file_path'] = full_path
+            print(f"Normalized Bills: {normalized_bills}")
 
             # Save intermediate normalized bills
             self.job_obj.normalized_bills = normalized_bills
