@@ -13,3 +13,5 @@ requests
 asgiref
 daphne
 channels
+
+uvicorn
