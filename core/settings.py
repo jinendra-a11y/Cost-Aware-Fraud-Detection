@@ -130,7 +130,7 @@ USE_TZ = True
 # Static & media files
 # ----------------------------------------------------------------------
 STATIC_URL = "static/"
-STATIC_ROOT = Path("/var/www/static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # **Important for deployment**
 MEDIA_URL = "/media/"
@@ -140,7 +140,7 @@ MEDIA_URL = "/media/"
 #   to:   MEDIA_ROOT = Path("/var/www/media")
 # Render mounts a persistent disk at /var/www, Railway at /railway.
 # Either path works as long as the platform you choose mounts that location.
-MEDIA_ROOT = Path("/var/www/media")   # <-- keep this for Render
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")   # <-- keep this for Render
 # If you later switch to Railway, change to Path("/railway/media")
 
 # ----------------------------------------------------------------------
