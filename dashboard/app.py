@@ -357,7 +357,7 @@ from PIL import Image
 
 BACKEND_URL = os.getenv("BACKEND_URL")
 API_URL = BACKEND_URL
-WS_URL = BACKEND_URL + "/ws"
+WS_URL = BACKEND_URL.replace("https", "ws") + "/ws"
 
 uploaded_files = []
 upload_status = {'to_upload': 0, 'uploaded': 0}
