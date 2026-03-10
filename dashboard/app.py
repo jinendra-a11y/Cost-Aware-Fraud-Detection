@@ -352,6 +352,7 @@ import requests
 import json
 import asyncio
 import websockets
+import os
 from PIL import Image
 
 BACKEND_URL = os.getenv("BACKEND_URL")

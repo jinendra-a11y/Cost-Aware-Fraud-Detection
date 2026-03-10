@@ -1,6 +1,7 @@
 import requests
 import json
 import websockets
+import os
 
 BACKEND_URL = os.getenv("BACKEND_URL")
 BASE = BACKEND_URL + "/api"
