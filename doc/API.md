@@ -351,6 +351,10 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 GOOGLE_APPLICATION_CREDENTIALS_JSON = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
+# Render runtime (recommended)
+# Set PYTHON_VERSION=3.12.0 to avoid Python 3.14 incompatibilities in some dependencies.
+PYTHON_VERSION = os.getenv("PYTHON_VERSION")
+
 # Feature flags
 ENABLE_FRAUD_DETECTION = os.getenv("ENABLE_FRAUD_DETECTION", "false").lower() == "true"
 ENABLE_FRAUD_DETECTION_MODEL = os.getenv("ENABLE_FRAUD_DETECTION_MODEL", "true").lower() == "true"

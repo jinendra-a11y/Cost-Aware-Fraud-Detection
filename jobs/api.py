@@ -7,10 +7,19 @@ from ninja import Router, File, Form
 from ninja.files import UploadedFile
 from .models import Job
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 import asyncio
 from .services import ExpensePipelineService
 
 router = Router()
+
+
+def _parse_to_aware(dt_str: str):
+    dt = parse_datetime(dt_str) if dt_str else None
+    if dt and timezone.is_naive(dt):
+        dt = timezone.make_aware(dt, timezone.get_current_timezone())
+    return dt
+
 
 @router.post("/submit-job")
 async def submit_job(
@@ -30,8 +39,8 @@ async def submit_job(
             defaults={
                 "pickup_location": details.get("pickup_location", "Unknown"),
                 "drop_location": details.get("drop_location", "Unknown"),
-                "pickup_time": parse_datetime(details.get("pickup_time")),
-                "drop_time": parse_datetime(details.get("drop_time")),
+                "pickup_time": _parse_to_aware(details.get("pickup_time")),
+                "drop_time": _parse_to_aware(details.get("drop_time")),
             })
     job.status = "QUEUED"
     await sync_to_async(job.save)()
@@ -39,7 +48,7 @@ async def submit_job(
     # 3. Save Files to Disk
     image_paths = []
     for f in files:
-    # Use a predictable relative path
+        # Use a predictable relative path
         relative_path = f"uploads/{job.id}/{f.name}"
         # Use default_storage which is configured in settings.py
         saved_path = await sync_to_async(default_storage.save)(relative_path, f)
