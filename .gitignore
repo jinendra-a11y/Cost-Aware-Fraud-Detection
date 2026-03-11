@@ -24,7 +24,6 @@ expense-approve-ocr.json
 *.log
 local_settings.py
 db.sqlite3
-media/uploads/
 media/*.sqlite3
 
 # Editor/IDE

@@ -40,7 +40,7 @@ async def submit_job(
     image_paths = []
     for f in files:
         # Save to media/uploads/job_id/filename
-        path = f"uploads/{job.id}/{f.name}"
+        path = f"{job.id}/{f.name}"
         # default_storage is sync, but we are in async def
         saved_path = await sync_to_async(default_storage.save)(path, f)
         full_path = await sync_to_async(default_storage.path)(saved_path)
