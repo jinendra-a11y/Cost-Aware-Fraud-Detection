@@ -39,7 +39,7 @@ python Normalization/normalization_out.py
 4. Run Django app (if you want full pipeline in-app)
 
 ```powershell
-# configure env vars (see config.py) then
+# configure env vars (see `core/settings.py` and `doc/API.md`) then
 python manage.py runserver
 ```
 

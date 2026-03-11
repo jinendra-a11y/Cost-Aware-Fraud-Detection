@@ -349,6 +349,7 @@ Configuration is read from environment variables in [config.py](config.py):
 # Provider credentials
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+GOOGLE_APPLICATION_CREDENTIALS_JSON = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
 
 # Feature flags
 ENABLE_FRAUD_DETECTION = os.getenv("ENABLE_FRAUD_DETECTION", "false").lower() == "true"
@@ -357,6 +358,10 @@ ENABLE_FRAUD_DETECTION_MODEL = os.getenv("ENABLE_FRAUD_DETECTION_MODEL", "true")
 # Cost-aware settings
 COST_AWARE_THRESHOLD = float(os.getenv("COST_AWARE_THRESHOLD", "0.05"))  # Skip fraud check if cost > $0.05
 ```
+
+### Google Vision auth on Render (recommended)
+
+On Render, it’s often easiest to avoid shipping a service-account key file. Set `GOOGLE_APPLICATION_CREDENTIALS_JSON` to the full JSON contents of your service account key. The app will use it directly (no filesystem dependency).
 
 ---
 
