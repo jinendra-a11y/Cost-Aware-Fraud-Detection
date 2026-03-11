@@ -138,6 +138,7 @@ class ExpensePipelineService:
             # Map bill_id to filename for tracking
             if isinstance(normalized_bills, list) and len(normalized_bills) == len(image_paths):
                 import os
+                from urllib.parse import quote
                 for i, bill in enumerate(normalized_bills):
                     if isinstance(bill, dict):
                         full_path = image_paths[i]
@@ -146,7 +147,7 @@ class ExpensePipelineService:
                         bill["bill_id"] = filename
                         bill["filename"] = filename
                         bill["file_path"] = full_path
-                        bill["image_url"] = f"/api/jobs/file?path={full_path}"
+                        bill["image_url"] = f"/api/jobs/file?path={quote(str(full_path), safe='/')}"
             print(f"Normalized Bills: {normalized_bills}")
 
             # Save intermediate normalized bills

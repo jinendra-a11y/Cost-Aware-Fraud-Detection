@@ -36,8 +36,10 @@ def get_uploaded_file(request, path: str):
     except Exception:
         raise Http404("File not found")
 
-    # Let the client render it; default to binary stream
-    return FileResponse(f)
+    # Ensure browsers can render via <img> by sending a reasonable content-type.
+    import mimetypes
+    content_type, _ = mimetypes.guess_type(path)
+    return FileResponse(f, content_type=content_type or "application/octet-stream")
 
 
 @router.post("/submit-job")
