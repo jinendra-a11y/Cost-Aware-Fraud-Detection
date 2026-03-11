@@ -354,10 +354,19 @@ import asyncio
 import websockets
 import os
 from PIL import Image
-
-BACKEND_URL = os.getenv("BACKEND_URL")
+BACKEND_URL = os.getenv("BACKEND_URL", "").rstrip("/")  # Remove any trailing slash
 API_URL = BACKEND_URL
-WS_URL = BACKEND_URL.replace("https", "ws") + "/ws"
+
+# Robust protocol replacement
+if BACKEND_URL.startswith("https"):
+    WS_URL = BACKEND_URL.replace("https", "wss", 1)  # Use wss for secure Render connections
+elif BACKEND_URL.startswith("http"):
+    WS_URL = BACKEND_URL.replace("http", "ws", 1)
+else:
+    WS_URL = f"ws://{BACKEND_URL}" # Fallback
+
+print(f"DEBUG: API_URL is {API_URL}")
+print(f"DEBUG: WS_URL is {WS_URL}")
 
 print("updated WS_URL:", WS_URL)
 
