@@ -359,6 +359,8 @@ BACKEND_URL = os.getenv("BACKEND_URL")
 API_URL = BACKEND_URL
 WS_URL = BACKEND_URL.replace("https", "ws") + "/ws"
 
+print("updated WS_URL:", WS_URL)
+
 uploaded_files = []
 upload_status = {'to_upload': 0, 'uploaded': 0}
 
