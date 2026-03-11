@@ -52,8 +52,16 @@ async def submit_job(
         relative_path = f"uploads/{job.id}/{f.name}"
         # Use default_storage which is configured in settings.py
         saved_path = await sync_to_async(default_storage.save)(relative_path, f)
-        # Store only the relative path in the list
-        image_paths.append(saved_path)
+        # Prefer an absolute filesystem path for internal processing (OCR),
+        # but fall back to the storage path for backends without `.path()`.
+        resolved_path = None
+        try:
+            if hasattr(default_storage, "path"):
+                resolved_path = default_storage.path(saved_path)
+        except Exception:
+            resolved_path = None
+
+        image_paths.append(resolved_path or saved_path)
 
     # 4. Trigger Background Task directly using asyncio
     service = ExpensePipelineService(j_id, job_obj=job)
