@@ -142,10 +142,12 @@ class ExpensePipelineService:
                 for i, bill in enumerate(normalized_bills):
                     if isinstance(bill, dict):
                         full_path = image_paths[i]
-                        # Keep bill_id stable and UI-friendly; provide a URL for image rendering.
-                        filename = os.path.basename(full_path) if isinstance(full_path, str) else str(full_path)
-                        bill["bill_id"] = filename
-                        bill["filename"] = filename
+                        # Keep bill_id as a unique identifier for rule engine lookups,
+                        # but also provide a UI-friendly name and an image URL.
+                        display_name = os.path.basename(full_path) if isinstance(full_path, str) else str(full_path)
+                        bill["bill_id"] = full_path
+                        bill["display_name"] = display_name
+                        bill["filename"] = display_name
                         bill["file_path"] = full_path
                         bill["image_url"] = f"/api/jobs/file?path={quote(str(full_path), safe='/')}"
             print(f"Normalized Bills: {normalized_bills}")
@@ -194,7 +196,9 @@ class ExpensePipelineService:
                         reasoning.append("The bill amount is unacceptable (zero or negative).")
                         
                     early_fail.append({
-                        "bill_id": bill["bill_id"],
+                        "bill_id": bill.get("display_name") or bill["bill_id"],
+                        "file_path": bill.get("file_path"),
+                        "image_url": bill.get("image_url"),
                         "bill_type": bill.get("bill_type"),
                         "fraud_decision": "Yes",
                         "confidence_score": 100,
@@ -207,7 +211,9 @@ class ExpensePipelineService:
                     if fails == [None]:
                         fails = []
                     pass_to_llm.append({    
-                        "bill_id": bill["bill_id"],
+                        "bill_id": bill.get("display_name") or bill["bill_id"],
+                        "file_path": bill.get("file_path"),
+                        "image_url": bill.get("image_url"),
                         "bill_type": bill.get("bill_type"),
                         "fraud_decision": "No",
                         "confidence_score": 100,
