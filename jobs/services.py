@@ -140,11 +140,10 @@ class ExpensePipelineService:
                 import os
                 for i, bill in enumerate(normalized_bills):
                     if isinstance(bill, dict):
-                        filename = os.path.basename(image_paths[i])
                         full_path = image_paths[i]
                         # Store both filename (for display) and full path (for accessing file)
                         bill['bill_id'] = full_path
-                        bill['filename'] = filename
+                        bill['filename'] = full_path
                         bill['file_path'] = full_path
             print(f"Normalized Bills: {normalized_bills}")
 
