@@ -61,7 +61,12 @@ async def submit_job(
         except Exception:
             resolved_path = None
 
-        image_paths.append(resolved_path or saved_path)
+        # Only use resolved filesystem path if it really exists.
+        # In some deployments, `.path()` can point at a non-writable or non-existent location.
+        if resolved_path and os.path.exists(resolved_path):
+            image_paths.append(resolved_path)
+        else:
+            image_paths.append(saved_path)
 
     # 4. Trigger Background Task directly using asyncio
     service = ExpensePipelineService(j_id, job_obj=job)

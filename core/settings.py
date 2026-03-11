@@ -140,8 +140,9 @@ MEDIA_URL = "/media/"
 #   to:   MEDIA_ROOT = Path("/var/www/media")
 # Render mounts a persistent disk at /var/www, Railway at /railway.
 # Either path works as long as the platform you choose mounts that location.
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")   # <-- keep this for Render
-# If you later switch to Railway, change to Path("/railway/media")
+# In production (Render), prefer mounting a persistent disk and setting MEDIA_ROOT to it.
+# Example Render disk mount: /var/data  → set MEDIA_ROOT=/var/data/media
+MEDIA_ROOT = os.getenv("MEDIA_ROOT") or os.path.join(BASE_DIR, "media")
 
 # ----------------------------------------------------------------------
 # Default primary key field type
