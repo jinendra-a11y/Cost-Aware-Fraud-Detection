@@ -5,13 +5,14 @@ import asyncio
 import websockets
 import os
 from PIL import Image
+from urllib.parse import quote
 BACKEND_URL = os.getenv("BACKEND_URL", "").rstrip("/")  # Remove any trailing slash
 API_URL = BACKEND_URL
 
 # Robust protocol replacement
 if BACKEND_URL.startswith("https"):
     WS_URL = BACKEND_URL.replace("https", "wss", 1)  # Use wss for secure Render connections
-elif BACKEND_URL.xstartswith("http"):
+elif BACKEND_URL.startswith("http"):
     WS_URL = BACKEND_URL.replace("http", "ws", 1)
 else:
     WS_URL = f"ws://{BACKEND_URL}" # Fallback
@@ -72,14 +73,16 @@ def show_results(data, client):
                         ui.label('No data found in processed bills.').style('color: #94a3b8; font-family: "DM Sans", sans-serif; margin-top: 12px;')
                 else:
                     for i, bill in enumerate(bills):
-                        image_path = bill.get("bill_id")
+                        image_url = bill.get("image_url")
                         with ui.card().style('background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 16px;'):
                             ui.label(f'Bill #{i+1}').style('font-size: 11px; font-weight: 700; color: #6366f1; background: #eef2ff; padding: 3px 10px; border-radius: 20px; display: inline-block; margin-bottom: 14px; letter-spacing: 0.05em;')
                             with ui.row().classes('w-full gap-6 items-start flex-nowrap'):
                                 with ui.column().style('width: 520px; flex-shrink: 0;'):
-                                    if image_path:
-                                        fixed_image = resize_with_padding(image_path)
-                                        ui.image(fixed_image).style('width: 500px; height: 500px; border-radius: 10px; border: 1px solid #e2e8f0;')
+                                    if image_url:
+                                        # image_url is a backend path; make it absolute for the browser.
+                                        if image_url.startswith("/"):
+                                            image_url = f"{API_URL}{image_url}"
+                                        ui.image(image_url).style('width: 500px; height: 500px; border-radius: 10px; border: 1px solid #e2e8f0; object-fit: contain; background: #ffffff;')
                                     else:
                                         with ui.element('div').style('width: 500px; height: 300px; background: #f1f5f9; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center;'):
                                             ui.label('No image').style('color: #94a3b8;')

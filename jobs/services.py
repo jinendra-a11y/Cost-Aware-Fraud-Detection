@@ -141,10 +141,12 @@ class ExpensePipelineService:
                 for i, bill in enumerate(normalized_bills):
                     if isinstance(bill, dict):
                         full_path = image_paths[i]
-                        # Store both filename (for display) and full path (for accessing file)
-                        bill['bill_id'] = full_path
-                        bill['filename'] = full_path
-                        bill['file_path'] = full_path
+                        # Keep bill_id stable and UI-friendly; provide a URL for image rendering.
+                        filename = os.path.basename(full_path) if isinstance(full_path, str) else str(full_path)
+                        bill["bill_id"] = filename
+                        bill["filename"] = filename
+                        bill["file_path"] = full_path
+                        bill["image_url"] = f"/api/jobs/file?path={full_path}"
             print(f"Normalized Bills: {normalized_bills}")
 
             # Save intermediate normalized bills

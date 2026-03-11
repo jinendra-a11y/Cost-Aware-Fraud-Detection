@@ -3,6 +3,7 @@ import os
 import uuid
 from typing import List
 from django.core.files.storage import default_storage
+from django.http import FileResponse, Http404
 from ninja import Router, File, Form
 from ninja.files import UploadedFile
 from .models import Job
@@ -19,6 +20,24 @@ def _parse_to_aware(dt_str: str):
     if dt and timezone.is_naive(dt):
         dt = timezone.make_aware(dt, timezone.get_current_timezone())
     return dt
+
+
+@router.get("/file")
+def get_uploaded_file(request, path: str):
+    """
+    Stream an uploaded file from Django storage.
+    Kept intentionally simple for demos; restricts access to the `uploads/` prefix.
+    """
+    if not path or ".." in path or path.startswith(("/", "\\")) or not path.startswith("uploads/"):
+        raise Http404("File not found")
+
+    try:
+        f = default_storage.open(path, "rb")
+    except Exception:
+        raise Http404("File not found")
+
+    # Let the client render it; default to binary stream
+    return FileResponse(f)
 
 
 @router.post("/submit-job")
@@ -52,21 +71,8 @@ async def submit_job(
         relative_path = f"uploads/{job.id}/{f.name}"
         # Use default_storage which is configured in settings.py
         saved_path = await sync_to_async(default_storage.save)(relative_path, f)
-        # Prefer an absolute filesystem path for internal processing (OCR),
-        # but fall back to the storage path for backends without `.path()`.
-        resolved_path = None
-        try:
-            if hasattr(default_storage, "path"):
-                resolved_path = default_storage.path(saved_path)
-        except Exception:
-            resolved_path = None
-
-        # Only use resolved filesystem path if it really exists.
-        # In some deployments, `.path()` can point at a non-writable or non-existent location.
-        if resolved_path and os.path.exists(resolved_path):
-            image_paths.append(resolved_path)
-        else:
-            image_paths.append(saved_path)
+        # Store the storage path (portable across deployments).
+        image_paths.append(saved_path)
 
     # 4. Trigger Background Task directly using asyncio
     service = ExpensePipelineService(j_id, job_obj=job)
